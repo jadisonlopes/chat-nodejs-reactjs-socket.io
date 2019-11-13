@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  background: linear-gradient(rgb(56, 56, 56), #ddd);
 }
 
 * {
@@ -17,9 +18,18 @@ body {
   flex-direction: column;
 }
 
+#user {
+  text-align: center;
+  font: bold;
+  font-size: 25px;
+}
+
 input {
   width: 600px;
+  color: #fff;
+  background: #069;
   border: 1px solid #ddd;
+  border-radius: 30px;
   height: 50px;
   padding: 0 20px;
   font-size: 14px;
@@ -29,18 +39,32 @@ button {
   width: 600px;
   height: 50px;
   font-size: 14px;
-  background: #069;
+  color: #069;
+  background: #fff;
+  border: 1px solid #069;
+  border-radius: 10px;
   text-align: center;
   line-height: 50px;
   font-weight: bold;
-  color: #fff;
   margin-top: 10px;
 }
 
 .messages {
   width: 600px;
+  background: #fff;
+  border-radius: 20px;
   height: 400px;
   margin: 20px 0;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   padding: 20px;
+  overflow: auto;
+}
+
+strong {
+  color: #000014;
+  font-size: 16px;
+}
+
+::placeholder {
+  color: #b0bec5;
 }

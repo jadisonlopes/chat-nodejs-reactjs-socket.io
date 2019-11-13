@@ -12,13 +12,30 @@
   </head>
   <body>
     <form id="chat">
-      <input type="text" name="username" placeholder="Digite seu usuário" />
+      <input
+        type="text"
+        id="user"
+        readonly
+        name="username"
+        placeholder="Digite seu usuário"
+      />
       <div class="messages"></div>
-      <input type="text" name="message" placeholder="Digite sua mensagem" />
+      <input
+        type="text"
+        name="message"
+        placeholder="Digite sua mensagem"
+        autocomplete="off"
+      />
       <button type="submit">Enviar</button>
     </form>
     <script type="text/javascript">
-      var socket = io("http://localhost:3000");
+      var socket = io("http://localhost:3000", author);
+
+      var author;
+      do {
+        author = prompt("Qual é o seu nome?").toUpperCase();
+      } while (author == null || author == "");
+      $("input[name=username]").val(author);
 
       function renderMessage(message) {
         $(".messages").append(
@@ -30,6 +47,8 @@
         );
       }
 
+      socket.emit("conectionInit", author);
+
       socket.on("previousMessages", function(messages) {
         for (message of messages) {
           renderMessage(message);
@@ -40,11 +59,13 @@
         renderMessage(message);
       });
 
+      socket.on("conection", function(user) {
+        renderMessage(user);
+      });
+
       $("#chat").submit(function(event) {
         event.preventDefault();
-        $("input[name=message]").empty();
 
-        var author = $("input[name=username]").val();
         var message = $("input[name=message]").val();
 
         if (author.length && message.length) {

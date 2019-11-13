@@ -17,13 +17,23 @@ app.use("/", (req, res) => {
 let messages = [];
 
 io.on("connection", socket => {
-  console.log(`Socket conectado: ${socket.id}`);
+  // console.log(`Socket conectado: ${socket.id}`);
 
+  socket.emit("conectionInit", messages);
   socket.emit("previousMessages", messages);
 
   socket.on("sendMessage", data => {
     messages.push(data);
     socket.broadcast.emit("receivedMessage", data);
+  });
+
+  socket.on("conectionInit", author => {
+    const conection = {
+      author: author,
+      message: "Entrou no chat"
+    };
+    messages.push(conection);
+    socket.broadcast.emit("conection", conection);
   });
 });
 
