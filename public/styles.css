@@ -60,6 +60,15 @@ button {
   overflow: auto;
 }
 
+select {
+  width: 600px;
+  height: 30px;
+  font-size: 14px;
+  border-radius: 7px;
+  margin-top: 10px;
+  text-align: center;
+}
+
 strong {
   color: #000014;
   font-size: 16px;

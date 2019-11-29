@@ -19,6 +19,7 @@
         placeholder="Digite sua mensagem"
         autocomplete="off"
       />
+      <div id="users"></div>
       <button type="submit">Enviar</button>
     </form>
 
@@ -31,19 +32,38 @@
       } while (author == null || author == "");
       document.querySelector("#user").value = author;
 
-      function renderMessage(message) {
+      renderMessage = message => {
         let div = document.createElement("div");
         div.attributes.name = "message";
 
         let author = document.createElement("strong");
-        author.textContent = message.author + ": ";
+        author.textContent =
+          message.author +
+          (message.destiny ? " para " + message.destiny : "") +
+          ": ";
 
         div.append(author, message.message);
 
         document.querySelector(".messages").appendChild(div);
-      }
+      };
 
-      socket.emit("conectionInit", author);
+      socket.emit("connectionInit", author);
+
+      socket.on("conectionsUsers", users => {
+        document.querySelector("#users").innerHTML = "";
+
+        let select = document.createElement("select");
+        select.attributes.id = "name";
+        users.unshift("TODOS");
+        for (user of users) {
+          if (user !== author) {
+            let opiton = document.createElement("option");
+            opiton.textContent = user;
+            select.appendChild(opiton);
+          }
+        }
+        document.querySelector("#users").appendChild(select);
+      });
 
       socket.on("previousMessages", messages => {
         for (message of messages) {
@@ -55,18 +75,21 @@
         renderMessage(message);
       });
 
-      socket.on("conection", user => {
+      socket.on("connection", user => {
         renderMessage(user);
       });
 
       document.querySelector("#chat").addEventListener("submit", event => {
         event.preventDefault();
 
-        var message = document.querySelector("#message").value;
+        let message = document.querySelector("#message").value;
+        let name = document.querySelectorAll("select")[0];
+        let destiny = name.options[name.selectedIndex].innerText;
 
         if (author.length && message.length) {
-          var messageObject = {
+          let messageObject = {
             author,
+            destiny,
             message
           };
 
